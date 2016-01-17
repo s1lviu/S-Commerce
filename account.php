@@ -217,54 +217,56 @@ if (isset($_GET["logout"])) {
 
 
 <?php } else { ?>
-
-    <ul id="basket_list" class="list-group">
-        <?php
-        try {
-            require_once 'db.php';
-            $collection = new MongoCollection($db, 'orders');
-            $sweetQuery = $collection->findOne(array('_id' => new MongoId($_GET["order"])));
-
-            $cursor = $collection->find($sweetQuery);
-
-            foreach ($cursor as $obj) {
-                $ids = $obj["ids"];
-                $ids = explode(";", $ids);
-            }
-        } catch (MongoConnectionException $e) {
-            // if there was an error, we catch and display the problem here
-            echo $e->getMessage();
-        } catch (MongoException $e) {
-            echo $e->getMessage();
-        }
-
-
-        $collection = new MongoCollection($db, 'products');
-
-        $_ids = array();
-        foreach ($ids as $separateIds) {
-            $_ids[] = $separateIds instanceof MongoId ? $separateIds : new MongoId($separateIds);
-        }
-        $thisSearch = $collection->find(array('_id' => array('$in' => $_ids)));
-
-        $how_many = array_count_values($ids);
-
-
-        $price = 0;
-        foreach ($thisSearch as $obj) {
-            $id = $obj["_id"];
-            $price += $obj["price"] * $how_many["$id"];
-            ?>
-
-            <li class="list-group-item"><?php echo $obj["title"] . ' x ' . $how_many["$id"]; ?></li>
-
-
+    <div class="container">
+        <h2>Order details</h2>
+        <ul id="basket_list" class="list-group">
             <?php
-        }
+            try {
+                require_once 'db.php';
+                $collection = new MongoCollection($db, 'orders');
+                $sweetQuery = $collection->findOne(array('_id' => new MongoId($_GET["order"])));
 
-        ?>
-        <li class="list-group-item">Total price: $<?php echo $price; ?></li>
-    </ul>
+                $cursor = $collection->find($sweetQuery);
+
+                foreach ($cursor as $obj) {
+                    $ids = $obj["ids"];
+                    $ids = explode(";", $ids);
+                }
+            } catch (MongoConnectionException $e) {
+                // if there was an error, we catch and display the problem here
+                echo $e->getMessage();
+            } catch (MongoException $e) {
+                echo $e->getMessage();
+            }
+
+
+            $collection = new MongoCollection($db, 'products');
+
+            $_ids = array();
+            foreach ($ids as $separateIds) {
+                $_ids[] = $separateIds instanceof MongoId ? $separateIds : new MongoId($separateIds);
+            }
+            $thisSearch = $collection->find(array('_id' => array('$in' => $_ids)));
+
+            $how_many = array_count_values($ids);
+
+
+            $price = 0;
+            foreach ($thisSearch as $obj) {
+                $id = $obj["_id"];
+                $price += $obj["price"] * $how_many["$id"];
+                ?>
+
+                <li class="list-group-item"><?php echo $obj["title"] . ' x ' . $how_many["$id"]; ?></li>
+
+
+                <?php
+            }
+
+            ?>
+            <li class="list-group-item">Total price: $<?php echo $price; ?></li>
+        </ul>
+    </div>
 <?php } ?>
 
 
