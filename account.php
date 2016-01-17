@@ -158,7 +158,7 @@ if (isset($_GET["logout"])) {
     try {
         require_once 'db.php';
         $collection = new MongoCollection($db, 'users');
-        $sweetQuery = $collection->find(array('_id' => new MongoId($_SESSION["account"])));
+        $sweetQuery = $collection->findOne(array('_id' => new MongoId($_SESSION["account"])));
 
         $cursor = $collection->find($sweetQuery);
         foreach ($cursor as $obj) {
@@ -195,10 +195,9 @@ if (isset($_GET["logout"])) {
             try {
                 require_once 'db.php';
                 $collection = new MongoCollection($db, 'orders');
-                $sweetQuery = $collection->find(array('user_id' => new MongoId($_SESSION["account"])));
 
-                $cursor = $collection->find($sweetQuery);
-                foreach ($cursor as $obj) {
+                $something = $collection->find(array('user_id' => new MongoId($_SESSION["account"])));
+                foreach ($something as $obj) {
                     ?>
                     <tr>
                         <td><?php echo $obj["_id"]; ?></td>
@@ -270,7 +269,7 @@ if (isset($_GET["logout"])) {
 
 
 <?php
-if (isset($_POST["address"])) {
+if (isset($_POST["u_address"])) {
     try {
         require_once 'db.php';
         $collection = new MongoCollection($db, 'users');
@@ -281,7 +280,7 @@ if (isset($_POST["address"])) {
         // fetch the Jackets record
         $document = $collection->findOne($product_array);
         // specify new values for Jackets
-        $document['address'] = $_POST["address"];
+        $document['address'] = $_POST["u_address"];
         // save back to the database
         $collection->save($document);
 
@@ -301,7 +300,7 @@ if (isset($_POST["address"])) {
         $("#updateAddress").click(function () {
             $.post("account.php",
                 {
-                    address: $('#address').html()
+                    u_address: $('#address').html()
 
                 },
                 function (data, status) {
