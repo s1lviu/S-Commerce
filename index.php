@@ -59,7 +59,7 @@ try {
                 <?php if (isset($_SESSION["account"])) { ?>
                     <li class="active"><a href="account.php">Orders</a></li>
                 <?php } else { ?>
-                    <li class="active"><a href="account.php">Login</a></li>
+                    <li class="active"><a href="account.php">Account</a></li>
                 <?php } ?>
             </ul>
             <ul class="nav navbar-nav navbar-right">

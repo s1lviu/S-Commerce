@@ -85,7 +85,7 @@ if (isset($_POST["ids"])) {
 
     <ul id="basket_list" class="list-group">
     </ul>
-    <p id="total"></p>
+    <p id="total">Total: $</p>
     <button id="checkout">Checkout</button>
 </div>
 <script>
@@ -95,7 +95,7 @@ if (isset($_POST["ids"])) {
         localStorage.removeItem('total_price');
         localStorage.removeItem('no_products');
         alert("No more products in your cart!");
-        window.location="index.php";
+        window.location = "index.php";
     }
 
     var names = localStorage.getItem("names").split(";");
@@ -117,7 +117,7 @@ if (isset($_POST["ids"])) {
                 localStorage.removeItem('names');
                 localStorage.removeItem('total_price');
                 localStorage.removeItem('no_products');
-                window.location="account.php";
+                window.location = "account.php";
             });
     });
 
