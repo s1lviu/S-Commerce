@@ -201,7 +201,7 @@ if (isset($_GET["logout"])) {
                     ?>
                     <tr>
                         <td><?php echo $obj["_id"]; ?></td>
-                        <td><a href="account.php?order=<?php echo $obj["_id"]; ?>">Order detail</a></td>
+                        <td><a href="account.php?order=<?php echo $obj["_id"]; ?>">Order details</a></td>
                     </tr>
                 <?php }
             } catch (MongoConnectionException $e) {
