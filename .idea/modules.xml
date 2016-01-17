@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/mongo.iml" filepath="$PROJECT_DIR$/.idea/mongo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/S-Commerce.iml" filepath="$PROJECT_DIR$/.idea/S-Commerce.iml" />
     </modules>
   </component>
 </project>
