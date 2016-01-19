@@ -6,8 +6,16 @@ try {
     // a new products collection object
     $collection = $db->products;
 
-    // fetch all product documents
-    $cursor = $collection->find();
+
+    if (isset($_POST["search_cat"]) && isset($_POST["keyword"])) {
+        $keyword = $_POST["keyword"];
+        $value = $_POST["search_cat"];
+        $query = array($value => array('$regex' => new MongoRegex("/$keyword/i")));
+        $cursor = $collection->find($query);
+    } else {
+        // fetch all product documents
+        $cursor = $collection->find();
+    }
 
     // How many results found
     $num_docs = $cursor->count();
@@ -80,6 +88,26 @@ try {
                     class="glyphicon glyphicon-th"></span>Grid</a>
             <a class="btn btn-info btn-sm" href="cart.php"><span id="basket"></span> products in basket</a>
         </div>
+    </div>
+
+
+    <div class="container row">
+        <form action="index.php" method="post">
+            <div class="form-group pull-right">
+                <label for="sel1">Choose category</label>
+                <select name="search_cat" class="form-control" id="sel1">
+                    <option value="title">Product name</option>
+                    <option value="description">Product description</option>
+                </select>
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Go!</button>
+      </span>
+                </div><!-- /input-group -->
+
+
+        </form>
     </div>
 
     <?php if (!isset($_GET["id"])) { ?>

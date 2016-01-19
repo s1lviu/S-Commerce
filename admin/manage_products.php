@@ -4,6 +4,21 @@ if ($_SESSION["account"] != "569b89108cca299727008360") {
     header("Location: ../index.php");
 }
 
+if (isset($_GET["delete"])) {
+    try {
+        require_once '../db.php';
+        $id = $_GET["delete"];
+        $collection = $db->products;
+        $collection->remove(array('_id' => new MongoId($id)));
+        header("Location: manage_products.php");
+    } catch (MongoConnectionException $e) {
+        // if there was an error, we catch and display the problem here
+        echo $e->getMessage();
+    } catch (MongoException $e) {
+        echo $e->getMessage();
+    }
+}
+
 if (isset($_POST["title"]) && isset($_FILES["fileToUpload"])) {
     try {
         require_once '../db.php';
@@ -51,21 +66,31 @@ if (isset($_POST["title"]) && isset($_FILES["fileToUpload"])) {
         // a new products collection object
         $collection = $db->products;
 
+
         // Create an array of values to insert
         $title = (isset($_POST["title"]) ? $_POST["title"] : $title = '0');
         $description = (isset($_POST["description"]) ? $_POST["description"] : $description = '0');
         $price = (isset($_POST["price"]) ? $_POST["price"] : $price = '0');
 
-        $product = array(
-            'title' => $title,
-            'description' => $description,
-            'price' => $price,
-            'image' => $newfilename
-        );
 
-        // insert the array
-        $collection->insert($product);
+        if (isset($_POST["update"])) {
 
+            $product_array = array(
+                '_id' => new MongoId($_POST["update"])
+            );
+
+            // fetch the Jackets record
+            $document = $collection->findOne($product_array);
+            // specify new values for Jackets
+            $document['title'] = $title;
+            $document['description'] = $description;
+            $document['price'] = $price;
+            if (isset($newfilename))
+                $document['image'] = $newfilename;
+            // save back to the database
+            $collection->save($document);
+            header("Location: manage_products.php");
+        }
 
         // close connection to MongoDB
         $conn->close();
@@ -150,30 +175,100 @@ if (isset($_POST["title"]) && isset($_FILES["fileToUpload"])) {
         </div>
     </div>
 </nav>
+
+
 <div class="container">
-    <div class="row">
-        <h2>Add a product</h2>
-        <form role="form" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="email">Titlu produs:</label>
-                <input required name="title" type="text" class="form-control" id="email" placeholder="Product name">
-            </div>
-            <div class="form-group">
-                <label for="email">Descriere produs:</label>
+    <h2>Manage products</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        try {
+            require_once '../db.php';
+            $collection = new MongoCollection($db, 'products');
+
+            $something = $collection->find();
+            foreach ($something as $obj) {
+                $description = $obj["description"];
+
+                if (strlen($description) > 20)
+                    $description = substr($description, 0, 17) . '...';
+                ?>
+                <tr>
+                    <td><?php echo $obj["_id"]; ?></td>
+                    <td><?php echo $obj["title"]; ?></td>
+                    <td><?php echo $description; ?></td>
+                    <td><?php echo $obj["price"]; ?></td>
+                    <td>
+                        <a class="btn btn-warning"
+                           href="manage_products.php?update=<?php echo $obj["_id"]; ?>">Update</a>
+                        <a class="btn btn-danger"
+                           href="manage_products.php?delete=<?php echo $obj["_id"]; ?>">Delete</a>
+                    </td>
+
+                </tr>
+            <?php }
+        } catch (MongoConnectionException $e) {
+            // if there was an error, we catch and display the problem here
+            echo $e->getMessage();
+        } catch (MongoException $e) {
+            echo $e->getMessage();
+        } ?>
+
+        </tbody>
+    </table>
+</div>
+
+<?php if (isset($_GET["update"])) {
+
+    require_once '../db.php';
+    $collection = new MongoCollection($db, 'products');
+
+    $something = $collection->findOne(array('_id' => new MongoId($_GET["update"])));
+    $cursor = $collection->find($something);
+    foreach ($cursor as $obj) {
+        $id = $obj["_id"];
+        $title = $obj["title"];
+        $price = $obj["price"];
+        $description = $obj["description"];
+    }
+
+    ?>
+    <div class="container">
+        <div class="row">
+            <h2>Update product</h2>
+            <form role="form" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="email">Titlu produs:</label>
+                    <input value="<?php echo $title; ?>" required name="title" type="text" class="form-control"
+                           id="email" placeholder="Product name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Descriere produs:</label>
             <textarea required name="description" type="text" class="form-control" id="email"
-                      placeholder="Product description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="email">Pret produs:</label>
-                <input required name="price" type="number" class="form-control" id="email" placeholder="Product price">
-            </div>
+                      placeholder="Product description"><?php echo $description; ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="email">Pret produs:</label>
+                    <input value="<?php echo $price; ?>" required name="price" type="number" class="form-control"
+                           id="email"
+                           placeholder="Product price">
+                </div>
 
 
-            <div class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                <!-- image-preview-filename input [CUT FROM HERE]-->
-                <div class="input-group image-preview">
-                    <input type="text" class="form-control image-preview-filename" disabled="disabled">
-                    <!-- don't give a name === doesn't send on POST/GET -->
+                <div class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                    <!-- image-preview-filename input [CUT FROM HERE]-->
+                    <div class="input-group image-preview">
+                        <input type="text" class="form-control image-preview-filename" disabled="disabled">
+                        <!-- don't give a name === doesn't send on POST/GET -->
                 <span class="input-group-btn">
                     <!-- image-preview-clear button -->
                     <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
@@ -187,14 +282,14 @@ if (isset($_POST["title"]) && isset($_FILES["fileToUpload"])) {
                         <!-- rename it -->
                     </div>
                 </span>
-                </div><!-- /input-group image-preview [TO HERE]-->
-            </div>
-
+                    </div><!-- /input-group image-preview [TO HERE]-->
+                </div>
+                <input type="hidden" name="update" value="<?php echo $id; ?>">
+        </div>
+        <button type="submit" class="btn btn-default">Save product</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-default">Save product</button>
-    </form>
-</div>
-
+<?php } ?>
 <script>
     $(document).on('click', '#close-preview', function () {
         $('.image-preview').popover('hide');
