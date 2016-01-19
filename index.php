@@ -40,13 +40,6 @@ try {
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="resources/css/style.css">
     <script src="resources/js/script.js"></script>
-    <style>
-        #description {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-    </style>
 </head>
 
 <body>
@@ -195,38 +188,6 @@ try {
     $conn->close();
     ?>
 </div>
-<script>
-    function addtocart(id, name, price) {
-
-        if (localStorage.getItem("ids") != null) {
-            localStorage.setItem("ids", localStorage.getItem("ids") + ";" + id);
-        } else {
-            localStorage.setItem("ids", id);
-        }
-
-        if (localStorage.getItem("total_price") != null) {
-            localStorage.setItem("total_price", Number(localStorage.getItem("total_price")) + Number(price));
-        } else {
-            localStorage.setItem("total_price", 0);
-            localStorage.setItem("total_price", Number(localStorage.getItem("total_price")) + Number(price));
-        }
-
-        localStorage.setItem("names", localStorage.getItem("names") + ";" + name);
-
-        localStorage.setItem("no_products", localStorage.getItem("ids").split(";").length);
-        document.getElementById("basket").innerHTML = localStorage.getItem("no_products");
-
-    }
-
-    $(document).ready(function checkout() {
-        if (localStorage.ids != null) {
-            localStorage.setItem("no_products", localStorage.getItem("ids").split(";").length);
-        } else {
-            localStorage.setItem("no_products", 0);
-        }
-        document.getElementById("basket").innerHTML = localStorage.getItem("no_products");
-    });
-</script>
 
 </body>
 </html>

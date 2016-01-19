@@ -55,3 +55,9 @@
 {
     margin: 0 0 11px;
 }
+
+#description {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
