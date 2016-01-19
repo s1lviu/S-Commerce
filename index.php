@@ -169,8 +169,9 @@ try {
                                     $ <?php echo $obj['price']; ?></p>
                             </div>
                             <div class="col-xs-12 col-md-6">
-                                <a class="btn btn-success" onclick=addtocart("<?php echo $obj['_id']; ?>")>Add to
-                                    cart</a>
+                                <a class="btn btn-success"
+                                   onclick=addtocart('<?php echo $obj['_id'] . "','" . urlencode($obj['title']) . "','" . $obj["price"]; ?>')>Add
+                                    to cart</a>
                             </div>
                         </div>
                     </div>
