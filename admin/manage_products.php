@@ -169,7 +169,7 @@ if (isset($_POST["title"]) && isset($_FILES["fileToUpload"])) {
             <ul class="nav navbar-nav navbar-right">
 
                 <?php if (isset($_SESSION["account"])) { ?>
-                    <li><a href="account.php?logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                    <li><a href="../account.php?logout"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
                 <?php } ?>
             </ul>
         </div>
