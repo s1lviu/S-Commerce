@@ -84,7 +84,7 @@ try {
     </div>
 
 
-    <div class="container row">
+    <div class="row">
         <form action="index.php" method="post">
             <div class="form-group pull-right">
                 <label for="sel1">Choose category</label>
@@ -98,7 +98,7 @@ try {
         <button class="btn btn-default" type="submit">Go!</button>
       </span>
                 </div><!-- /input-group -->
-
+            </div>
 
         </form>
     </div>
