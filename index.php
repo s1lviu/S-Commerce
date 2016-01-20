@@ -7,9 +7,9 @@ try {
     $collection = $db->products;
 
 
-    if (isset($_POST["search_cat"]) && isset($_POST["keyword"])) {
-        $keyword = $_POST["keyword"];
-        $value = $_POST["search_cat"];
+    if (isset($_GET["search_cat"]) && isset($_GET["keyword"])) {
+        $keyword = $_GET["keyword"];
+        $value = $_GET["search_cat"];
         $query = array($value => array('$regex' => new MongoRegex("/$keyword/i")));
         $cursor = $collection->find($query);
     } else {
@@ -73,35 +73,43 @@ try {
     </div>
 </nav>
 <div class="container">
-    <div class="well well-sm">
-        <strong>Display</strong>
-        <div class="btn-group">
-            <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
+    <?php if (!isset($_GET["id"])) { ?>
+        <div class="well well-sm">
+            <strong>Display</strong>
+            <div class="btn-group">
+                <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
             </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
-                    class="glyphicon glyphicon-th"></span>Grid</a>
-            <a class="btn btn-info btn-sm" href="cart.php"><span id="basket"></span> products in basket</a>
+                        class="glyphicon glyphicon-th"></span>Grid</a>
+            </div>
+            <a class="btn btn-default btn-md pull-right" href="cart.php"><span class="glyphicon glyphicon-shopping-cart btn-md"
+                                                                               id="basket"></span> products in
+                basket</a>
         </div>
-    </div>
 
 
-    <div class="row">
-        <form action="index.php" method="post">
-            <div class="form-group pull-right">
-                <label for="sel1">Choose category</label>
-                <select name="search_cat" class="form-control" id="sel1">
-                    <option value="title">Product name</option>
-                    <option value="description">Product description</option>
-                </select>
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control" placeholder="Search for...">
+        <div class="row">
+            <form action="index.php" method="get">
+                <div class="form-group pull-right">
+                    <label for="sel1">Choose category</label>
+                    <select name="search_cat" class="form-control" id="sel1">
+                        <option value="title">Product name</option>
+                        <option value="description">Product description</option>
+                    </select>
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search for...">
       <span class="input-group-btn">
         <button class="btn btn-default" type="submit">Go!</button>
       </span>
-                </div><!-- /input-group -->
-            </div>
+                    </div><!-- /input-group -->
+                </div>
 
-        </form>
-    </div>
+            </form>
+        </div>
+    <?php } else { ?>
+        <a onclick="window.history.back();" href="#" class="btn btn-primary btn-lg">
+            <span class="glyphicon glyphicon-arrow-left"></span> Back
+        </a>
+    <?php } ?>
 
     <?php if (!isset($_GET["id"])) { ?>
         <div id="products" class="row list-group">
