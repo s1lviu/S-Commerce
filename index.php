@@ -73,20 +73,21 @@ try {
     </div>
 </nav>
 <div class="container">
-    <?php if (!isset($_GET["id"])) { ?>
-        <div class="well well-sm">
-            <strong>Display</strong>
-            <div class="btn-group">
-                <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
+
+    <div class="well well-sm">
+        <strong>Display</strong>
+        <div class="btn-group">
+            <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
             </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
-                        class="glyphicon glyphicon-th"></span>Grid</a>
-            </div>
-            <a id="addToCart" class="btn btn-default btn-md" href="cart.php"><span class="glyphicon glyphicon-shopping-cart btn-md"
-                                                                               id="basket"></span> products in
-                basket</a>
+                    class="glyphicon glyphicon-th"></span>Grid</a>
         </div>
+        <a id="addToCart" class="btn btn-default btn-md" href="cart.php"><span
+                class="glyphicon glyphicon-shopping-cart btn-md"
+                id="basket"></span> products in
+            basket</a>
+    </div>
 
-
+    <?php if (!isset($_GET["id"])) { ?>
         <div class="row">
             <form action="index.php" method="get">
                 <div class="form-group pull-right">
