@@ -81,7 +81,7 @@ try {
             </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
                         class="glyphicon glyphicon-th"></span>Grid</a>
             </div>
-            <a class="btn btn-default btn-md pull-right" href="cart.php"><span class="glyphicon glyphicon-shopping-cart btn-md"
+            <a id="addToCart" class="btn btn-default btn-md" href="cart.php"><span class="glyphicon glyphicon-shopping-cart btn-md"
                                                                                id="basket"></span> products in
                 basket</a>
         </div>
