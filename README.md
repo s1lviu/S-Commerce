@@ -11,7 +11,7 @@ This is a nigthly version and could be buggy.</p>
 
 
 
-<h2 id="project-scructure">Project scructure:</h2>
+<h2 id="project-scructure">Project structure:</h2>
 
 <p><img src="http://i.imgur.com/VqNfzNm.png" alt="enter image description here" title=""></p>
 
